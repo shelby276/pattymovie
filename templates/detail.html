@@ -25,6 +25,24 @@
 </section>
 {% endif %}
 
+<section class="row pad">
+  <h2>Où regarder</h2>
+  {% for label, key in [("Streaming","flatrate"),("Location","rent"),("Achat","buy")] %}
+    {% if watch[key] %}
+    <p class="prov-label">{{ label }}</p>
+    <div class="providers">
+      {% for p in watch[key] %}<img src="{{ img(p.logo_path, 'w92') }}" alt="{{ p.provider_name }}" title="{{ p.provider_name }}" loading="lazy">{% endfor %}
+    </div>
+    {% endif %}
+  {% endfor %}
+  {% if watch.link and (watch.flatrate or watch.rent or watch.buy) %}
+    <a class="btn" href="{{ watch.link }}" target="_blank" rel="noopener">Voir les offres</a>
+  {% else %}
+    <p class="muted">Pas encore disponible en streaming dans ta région. Regarde la bande-annonce ci-dessus.</p>
+  {% endif %}
+  <p class="legal">Disponibilité fournie par JustWatch via TMDB.</p>
+</section>
+
 {% if cast %}
 <section class="row pad">
   <h2>Distribution</h2>
