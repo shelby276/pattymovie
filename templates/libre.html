@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ film.titre }} · PattyMovie{% endblock %}
+{% block content %}
+<section class="results">
+  <h2>{{ film.titre }}</h2>
+  <div class="player">
+    <iframe src="https://archive.org/embed/{{ film.id }}" title="{{ film.titre }}" allowfullscreen loading="lazy"></iframe>
+  </div>
+  <p class="legal">Film du domaine public, hébergé par Internet Archive.</p>
+</section>
+{% endblock %}
