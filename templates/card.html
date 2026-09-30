@@ -1,0 +1,7 @@
+<a class="card" href="{{ url_for('detail', media_type=m.media_type, tmdb_id=m.id) }}">
+  <img src="{{ img(m.poster_path) }}" alt="{{ m.title or m.name }}" loading="lazy">
+  <span class="card-info">
+    <b>{{ m.title or m.name }}</b>
+    <small>{% if m.vote_average %}★ {{ '%.1f'|format(m.vote_average) }}{% endif %}</small>
+  </span>
+</a>
