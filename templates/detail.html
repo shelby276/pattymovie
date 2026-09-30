@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ d.title or d.name }} · PattyMovie{% endblock %}
+{% block content %}
+<section class="hero detail" style="--hero:url('{{ img(d.backdrop_path, 'original') }}')">
+  <div class="hero-text">
+    <h1>{{ d.title or d.name }}</h1>
+    <p class="meta">
+      {{ (d.release_date or d.first_air_date or '')[:4] }}
+      {% if d.runtime %} · {{ d.runtime }} min{% endif %}
+      {% if d.number_of_seasons %} · {{ d.number_of_seasons }} saison(s){% endif %}
+      {% if d.vote_average %} · ★ {{ '%.1f'|format(d.vote_average) }}{% endif %}
+    </p>
+    <p>{{ d.overview or "Synopsis non disponible en français." }}</p>
+    <p class="tags">{% for g in d.genres %}<span>{{ g.name }}</span>{% endfor %}</p>
+  </div>
+</section>
+
+{% if trailer %}
+<section class="row pad">
+  <h2>Bande-annonce</h2>
+  <div class="player">
+    <iframe src="https://www.youtube-nocookie.com/embed/{{ trailer.key }}" title="Bande-annonce"
+            allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+  </div>
+</section>
+{% endif %}
+
+{% if cast %}
+<section class="row pad">
+  <h2>Distribution</h2>
+  <p class="cast">{% for c in cast %}<span>{{ c.name }}</span>{% endfor %}</p>
+</section>
+{% endif %}
+
+{% if similar %}
+<section class="row">
+  <h2>Dans le même genre</h2>
+  <div class="track">
+    {% for m in similar %}{% include "_card.html" %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
