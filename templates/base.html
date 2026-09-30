@@ -12,8 +12,9 @@
 <body>
   <header class="nav" id="nav">
     <a class="logo" href="{{ url_for('home') }}">PATTYMOVIE</a>
+    <a class="navlink" href="{{ url_for('films_libres') }}">Films libres</a>
     <form action="{{ url_for('search') }}" class="search">
-      <input name="q" value="{{ query or '' }}" placeholder="Rechercher un film ou une série" aria-label="Rechercher">
+      <input name="q" value="{{ query or '' }}" placeholder="Rechercher" aria-label="Rechercher">
     </form>
   </header>
   <main>{% block content %}{% endblock %}</main>
