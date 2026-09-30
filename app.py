@@ -11,6 +11,12 @@ BASE = "https://api.themoviedb.org/3"
 IMG = "https://image.tmdb.org/t/p"
 _cache = {}
 
+FILMS_LIBRES = [
+    {"id": "night_of_the_living_dead", "titre": "La Nuit des morts-vivants (1968)"},
+    {"id": "Plan_9_from_Outer_Space_1959", "titre": "Plan 9 from Outer Space (1959)"},
+    {"id": "his_girl_friday", "titre": "La Dame du vendredi (1940)"},
+]
+
 
 def tmdb(path, **params):
     key = (path, tuple(sorted(params.items())))
@@ -63,13 +69,26 @@ def search():
     return render_template("index.html", hero=None, rows=[], results=results, query=q)
 
 
+@app.route("/films-libres")
+def films_libres():
+    return render_template("libres.html", films=FILMS_LIBRES)
+
+
+@app.route("/films-libres/<film_id>")
+def film_libre(film_id):
+    film = next((f for f in FILMS_LIBRES if f["id"] == film_id), None)
+    if not film:
+        abort(404)
+    return render_template("libre.html", film=film)
+
+
 @app.route("/<media_type>/<int:tmdb_id>")
 def detail(media_type, tmdb_id):
     if media_type not in ("movie", "tv"):
         abort(404)
     d = tmdb(
         f"/{media_type}/{tmdb_id}",
-        append_to_response="videos,credits,similar",
+        append_to_response="videos,credits,similar,watch/providers",
         include_video_language="fr,en,null",
     )
     if not d:
@@ -83,8 +102,16 @@ def detail(media_type, tmdb_id):
         for s in d.get("similar", {}).get("results", [])
         if s.get("poster_path")
     ]
+    prov = d.get("watch/providers", {}).get("results", {})
+    zone = prov.get("CD") or prov.get("FR") or prov.get("US") or {}
+    watch = {
+        "link": zone.get("link"),
+        "flatrate": zone.get("flatrate", []),
+        "rent": zone.get("rent", []),
+        "buy": zone.get("buy", []),
+    }
     return render_template(
-        "detail.html", d=d, media_type=media_type, trailer=trailer,
+        "detail.html", d=d, media_type=media_type, trailer=trailer, watch=watch,
         cast=d.get("credits", {}).get("cast", [])[:8], similar=similar,
     )
 
