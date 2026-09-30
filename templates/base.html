@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}PattyMovie{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="nav" id="nav">
+    <a class="logo" href="{{ url_for('home') }}">PATTYMOVIE</a>
+    <form action="{{ url_for('search') }}" class="search">
+      <input name="q" value="{{ query or '' }}" placeholder="Rechercher un film ou une série" aria-label="Rechercher">
+    </form>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer class="foot">
+    <div class="logo small">PATTYMOVIE</div>
+    <p>Créé par <strong>Patty Mbayo</strong></p>
+    <p class="credit">Données et affiches fournies par TMDB. Ce site n'est ni approuvé ni certifié par TMDB.</p>
+  </footer>
+  <script>
+    const nav = document.getElementById('nav');
+    const onScroll = () => nav.classList.toggle('solid', window.scrollY > 40);
+    onScroll(); addEventListener('scroll', onScroll, {passive: true});
+  </script>
+</body>
+</html>
