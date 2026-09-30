@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+{% if query is not none %}
+  <section class="results">
+    <h2>{% if query %}Résultats pour « {{ query }} »{% else %}Tape un titre pour commencer{% endif %}</h2>
+    {% if query and not results %}<p class="muted">Aucun résultat. Essaie un autre titre ou une autre orthographe.</p>{% endif %}
+    <div class="grid">
+      {% for m in results %}{% include "_card.html" %}{% endfor %}
+    </div>
+  </section>
+{% else %}
+  {% if hero %}
+  <section class="hero" style="--hero:url('{{ img(hero.backdrop_path, 'original') }}')">
+    <div class="hero-text">
+      <h1>{{ hero.title or hero.name }}</h1>
+      <p>{{ hero.overview[:220] }}{% if hero.overview|length > 220 %}…{% endif %}</p>
+      <a class="btn" href="{{ url_for('detail', media_type=hero.media_type, tmdb_id=hero.id) }}">Voir la fiche</a>
+    </div>
+  </section>
+  {% else %}
+  <section class="results"><h2>Clé TMDB manquante</h2>
+    <p class="muted">Ajoute la variable d'environnement TMDB_API_KEY, puis relance le site.</p></section>
+  {% endif %}
+  {% for title, list in rows %}
+  {% if list %}
+  <section class="row">
+    <h2>{{ title }}</h2>
+    <div class="track">
+      {% for m in list %}{% include "_card.html" %}{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+  {% endfor %}
+{% endif %}
+{% endblock %}
