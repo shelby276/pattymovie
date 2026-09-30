@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Films libres · PattyMovie{% endblock %}
+{% block content %}
+<section class="results">
+  <h2>Films libres de droits</h2>
+  <p class="muted">Des classiques du domaine public, à regarder gratuitement.</p>
+  <div class="grid">
+    {% for f in films %}
+    <a class="card" href="{{ url_for('film_libre', film_id=f.id) }}">
+      <img src="https://archive.org/services/img/{{ f.id }}" alt="{{ f.titre }}" loading="lazy">
+      <span class="card-info"><b>{{ f.titre }}</b></span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
